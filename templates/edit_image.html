@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4 text-center">Редактировать изображение</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control", placeholder="Название изображения", value=image.title) }}
+            {% for error in form.title.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.about.label(class="form-label") }}
+            {{ form.about(class="form-control", placeholder="Описание изображения", value=image.about) }}
+            {% for error in form.about.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.tags.label(class="form-label") }}
+            {{ form.tags(class="form-control", placeholder="Тэги (через запятую)", value=image.tags) }}
+            {% for error in form.tags.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Текущее изображение</label>
+            <div class="mb-2">
+                <img src="{{ url_for('static', filename=image.image_name) }}" 
+                     class="img-thumbnail" 
+                     style="max-width: 200px; max-height: 200px;"
+                     alt="{{ image.title }}">
+            </div>
+            {{ form.image.label(class="form-label") }}
+            {{ form.image(class="form-control") }}
+            <div class="form-text">Оставьте пустым, если не хотите менять изображение</div>
+            {% for error in form.image.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="d-grid gap-2">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('images_api.get_one_image', image_id=image.id) }}" 
+               class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 
