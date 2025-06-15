@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="gallery-center-content">
+    <form method="get" class="row g-2 mb-4 justify-content-end" style="margin-right: auto;">
+        <div class="col-md-2">
+            <input type="text" name="author" class="form-control" placeholder="Автор (никнейм)" value="{{ request.args.get('author', '') }}">
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="tag" class="form-control" placeholder="Тег" value="{{ request.args.get('tag', '') }}">
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary w-100">Поиск</button>
+        </div>
+    </form>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-1 justify-content-center" style="width: 1200px; margin: 0 auto;">
+        {% for image in images %}
+        <div class="col d-flex flex-column align-items-center">
+            <div class="card" style="width: 100%; max-width: 250px;">
+                <img src="{{ url_for('static', filename=image.image_name) }}" class="card-img-top" alt="{{ image.title }}" style="aspect-ratio: 1 / 1; object-fit: cover;">
+            </div>
+            <div class="mt-2 text-center" style="width: 100%; max-width: 200px;">
+                <strong>{{ image.title }}</strong>
+                <div>
+                    by
+                    <a href="{{ url_for('show_profile', id=image.owner) }}">
+                        {{ image.user.nickname if image.user else 'Неизвестно' }}
+                    </a>
+                </div>
+                <div class="mt-1">
+                    {% for tag in image.tags %}
+                        <span class="badge bg-secondary">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col">
+            <div class="alert alert-info w-100 text-center">No photos yet.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
